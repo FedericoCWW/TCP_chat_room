@@ -1,4 +1,5 @@
 import threading, socket
+from colorama import Fore, Back, Style
 
 host = '127.0.0.1'      #local host
 port = 45572
@@ -24,6 +25,7 @@ def handle(client):
             clients.remove(client)
             client.close()
             nickname = nicknames[index]
+            print(f'{nickname} disconected')
             broadcast(f'{nickname} left the the chat'.encode('ascii'))
             nicknames.remove(nickname)
             break
@@ -31,16 +33,16 @@ def handle(client):
 def receive():
     while True:
         client, address = server.accept()
-        print(f'Connected with {str(address)}')
+        print(Fore.GREEN + f'Connected with {str(address)}')
         client.send('NICK'.encode('ascii'))
         nickname = client.recv(1024).decode('ascii')
         nicknames.append(nickname)
         clients.append(client)
-        print(f'Nickname: {nickname}')
+        print(Fore.CYAN + f'Nickname: {nickname} connected')
         broadcast(f'{nickname} joined the chat'.encode('ascii'))
         client.send('connected to the server'.encode('ascii'))
         #parte threading
         thread = threading.Thread(target=handle, args=(client,))
         thread.start()
-print("server is listening...")
+print(Fore.GREEN + "server is listening...")
 receive()           #recieve seria el main

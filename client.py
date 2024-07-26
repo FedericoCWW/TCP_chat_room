@@ -1,4 +1,5 @@
 import socket, threading
+import colorama
 
 client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 client.connect(('127.0.0.1', 45572))
@@ -20,7 +21,8 @@ def receive():
 
 def write():
     while True:
-        msg = f'{nickname}: {input("")}'
+        nick_msg = input("")
+        msg = f'{nickname}: {nick_msg}'
         client.send(msg.encode('ascii'))
 
 recieve_thread = threading.Thread(target=receive)
